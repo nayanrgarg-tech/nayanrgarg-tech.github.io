@@ -219,6 +219,47 @@ body {
     margin-right: auto;
 }
 
+/* Subsection Headers */
+.subsection-header {
+    text-align: center;
+    margin: 50px auto 35px;
+    max-width: 700px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.subsection-header.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.subsection-title {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #222;
+    position: relative;
+    display: inline-block;
+}
+
+.subsection-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #ff6b6b 0%, #4ecdc4 100%);
+    border-radius: 2px;
+}
+
+.subsection-tagline {
+    font-size: 16px;
+    color: #888;
+    font-style: italic;
+}
+
 /* Story Grid */
 .story-grid {
     display: grid;
@@ -562,6 +603,80 @@ body {
     font-size: 13px;
     color: #555;
     text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Latest Videos Section */
+.latest-videos-header {
+    margin-top: 60px;
+}
+
+.latest-videos-container {
+    max-width: 980px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border: 3px solid #ff0000;
+}
+
+.latest-videos-container .videos-display {
+    margin-bottom: 35px;
+}
+
+.latest-videos-container .video-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.latest-videos-container .video-item:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.latest-videos-container .video-thumb {
+    background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%);
+    border: 2px solid #ff0000;
+}
+
+.watch-link {
+    display: inline-block;
+    color: #ff0000;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 8px;
+    transition: all 0.3s ease;
+}
+
+.watch-link:hover {
+    color: #cc0000;
+    transform: translateX(5px);
+}
+
+.view-all-videos {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 2px solid #eee;
+}
+
+.view-all-button {
+    display: inline-block;
+    background: linear-gradient(110deg, #ff0000 0%, #cc0000 100%);
+    color: white;
+    padding: 16px 42px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 16px;
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.view-all-button:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
 }
 
 /* Tutoring Wrapper */
