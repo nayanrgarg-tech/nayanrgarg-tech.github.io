@@ -1,2 +1,2 @@
-# nayanrgarg-tech-github.io
+# nayanrgarg-tech.github.io
 My website
