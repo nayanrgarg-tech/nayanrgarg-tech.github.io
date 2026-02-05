@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add animation to metrics on scroll
     const observerOptions = {
-        threshold: 0.5,
-        rootMargin: '0px'
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
     };
 
     const observer = new IntersectionObserver(function(entries) {
@@ -70,17 +70,75 @@ document.addEventListener('DOMContentLoaded', function() {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
                 entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('visible');
             }
         });
     }, observerOptions);
 
-    const animatedElements = document.querySelectorAll('.story-block, .project-tile');
+    // Animate story blocks, project tiles, and subsection headers
+    const animatedElements = document.querySelectorAll('.story-block, .project-tile, .subsection-header, .contact-card, .video-item');
     animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(el);
     });
+
+    // Parallax effect for hero section
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const heroZone = document.querySelector('.hero-zone');
+        if (heroZone && scrolled < window.innerHeight) {
+            heroZone.style.transform = 'translateY(' + scrolled * 0.5 + 'px)';
+        }
+    });
+
+    // Add slide-in effect for section headers
+    const sectionHeaders = document.querySelectorAll('.segment-header');
+    const headerObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'scale(1)';
+            }
+        });
+    }, {
+        threshold: 0.3,
+        rootMargin: '0px'
+    });
+
+    sectionHeaders.forEach(header => {
+        header.style.opacity = '0';
+        header.style.transform = 'scale(0.9)';
+        header.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+        headerObserver.observe(header);
+    });
+
+    // Add stagger animation to facts list
+    const factItems = document.querySelectorAll('.facts-listing li');
+    const factsObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const items = entry.target.querySelectorAll('li');
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateX(0)';
+                    }, index * 100);
+                });
+            }
+        });
+    }, { threshold: 0.3 });
+
+    const factsList = document.querySelector('.facts-listing');
+    if (factsList) {
+        factItems.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(-30px)';
+            item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        });
+        factsObserver.observe(factsList);
+    }
 
     // Fun cursor trail effect on hero section (optional)
     const heroZone = document.querySelector('.hero-zone');
