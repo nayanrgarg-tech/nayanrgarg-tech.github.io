@@ -107,7 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 10);
                 
                 setTimeout(() => {
-                    document.body.removeChild(particle);
+                    if (particle.parentNode) {
+                        document.body.removeChild(particle);
+                    }
                 }, 1000);
             }
         });
@@ -115,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Console Easter egg
     console.log('%c🚀 Hey there! Welcome to the console!', 'font-size: 20px; color: #ff6b6b; font-weight: bold;');
-    console.log('%cIf you\'re here, you must love code as much as I do!', 'font-size: 14px; color: #4ecdc4;');
+    console.log('%cIf you are here, you must love code as much as I do!', 'font-size: 14px; color: #4ecdc4;');
     console.log('%cTry the Konami code on the page: ↑ ↑ ↓ ↓ ← → ← → B A', 'font-size: 12px; color: #ffe66d;');
 
 });
