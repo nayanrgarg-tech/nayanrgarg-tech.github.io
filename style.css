@@ -444,6 +444,178 @@ body {
     transform: translateY(-2px);
 }
 
+/* Project Request Section */
+.request-grid {
+    max-width: 950px;
+    margin: 0 auto 26px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.request-card {
+    background: white;
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(102, 126, 234, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.request-card h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: #222;
+}
+
+.request-card p {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    font-size: 15px;
+}
+
+.request-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.request-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #667eea;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 22px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.request-button:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+}
+
+.request-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.request-link:hover {
+    color: #764ba2;
+}
+
+.request-footer {
+    text-align: center;
+}
+
+.request-external {
+    color: #2c3e50;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.request-external:hover {
+    color: #667eea;
+}
+
+/* Custom Request Page */
+.request-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+}
+
+.request-hero {
+    text-align: center;
+    padding: 70px 20px 30px;
+}
+
+.request-hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    margin-bottom: 10px;
+    font-weight: 800;
+    color: #222;
+}
+
+.request-hero p {
+    color: #666;
+    font-size: 16px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.request-form {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(102, 126, 234, 0.12);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-field label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+    border: 1px solid #e2e6f1;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #333;
+    background: #fafbff;
+}
+
+.form-field textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.form-note {
+    font-size: 13px;
+    color: #888;
+}
+
 /* Contact Grid */
 .contact-grid {
     max-width: 900px;
