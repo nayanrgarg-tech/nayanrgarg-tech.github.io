@@ -208,6 +208,99 @@ body {
     transform: translateY(-2px);
 }
 
+.drops-note {
+    color: #845d4f;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.drops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.drop-card {
+    background: white;
+    border-radius: 18px;
+    padding: 22px;
+    text-decoration: none;
+    color: inherit;
+    display: grid;
+    gap: 18px;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(132, 93, 79, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.drop-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+}
+
+.drop-graphic {
+    position: relative;
+    height: 140px;
+    border-radius: 14px;
+    background: radial-gradient(circle at top, rgba(216, 96, 21, 0.35), rgba(132, 93, 79, 0.9));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.drop-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
+    animation: glowPulse 3s ease-in-out infinite;
+}
+
+.drop-spark {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff2e8;
+    top: 22px;
+    right: 26px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    animation: sparkFloat 2.6s ease-in-out infinite;
+}
+
+.drop-label {
+    position: relative;
+    background: #ffffff;
+    color: #845d4f;
+    font-weight: 800;
+    padding: 10px 18px;
+    border-radius: 24px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.drop-meta h2 {
+    font-size: 20px;
+    margin-bottom: 6px;
+    color: #222;
+}
+
+.drop-meta p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@keyframes glowPulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes sparkFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
 /* Story Grid */
 .story-grid {
     display: grid;

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Button That Gets Worse</title>
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --accent: #d86015;
+            --accent-dark: #845d4f;
+            --bg: #f7f2ef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .scene {
+            position: relative;
+            width: min(900px, 92vw);
+            min-height: min(620px, 88vh);
+            background: rgba(255, 255, 255, 0.86);
+            border-radius: 26px;
+            padding: 32px 30px 90px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            border: 2px solid rgba(132, 93, 79, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: #6b5e58;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .stat-pill {
+            background: #fff3ec;
+            color: #7a4a34;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid rgba(216, 96, 21, 0.3);
+        }
+
+        .button-area {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .doom-button {
+            position: relative;
+            border: none;
+            padding: 20px 48px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 12px 24px rgba(216, 96, 21, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .doom-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(216, 96, 21, 0.4);
+        }
+
+        .message-stack {
+            position: absolute;
+            bottom: 18px;
+            left: 24px;
+            right: 24px;
+            display: grid;
+            gap: 8px;
+            max-height: 160px;
+            overflow: hidden;
+        }
+
+        .message {
+            background: rgba(26, 26, 26, 0.08);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 13px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .floating-text {
+            position: absolute;
+            font-weight: 700;
+            font-size: 16px;
+            color: rgba(132, 93, 79, 0.8);
+            animation: floatAway 2.4s ease forwards;
+            pointer-events: none;
+        }
+
+        .popup {
+            position: absolute;
+            background: #fff;
+            border: 2px solid rgba(132, 93, 79, 0.4);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 13px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            animation: popIn 0.4s ease;
+        }
+
+        .popup strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .shake {
+            animation: shake 0.35s ease;
+        }
+
+        .tilt {
+            animation: tilt 0.6s ease;
+        }
+
+        .glitch {
+            filter: hue-rotate(30deg) saturate(1.5) contrast(1.05);
+        }
+
+        .panel {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .panel.active {
+            opacity: 1;
+            animation: flicker 1.2s ease;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 160px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar span {
+            display: block;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #f5a45d);
+            transition: width 0.4s ease;
+        }
+
+        .notification {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            background: #2b1e1a;
+            color: #fff0e6;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 12px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.4s ease;
+        }
+
+        .boss-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(500px, 90%);
+            height: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 999px;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .boss-bar span {
+            display: block;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #d86015, #6b1f07);
+            transition: width 0.4s ease;
+        }
+
+        .boss-bar.active {
+            opacity: 1;
+            animation: pulse 1s ease infinite;
+        }
+
+        .overlay-warning {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 800;
+            color: rgba(216, 96, 21, 0.8);
+            text-transform: uppercase;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .overlay-warning.active {
+            opacity: 1;
+            animation: warningPulse 1s ease;
+        }
+
+        .finale {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.98));
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 18px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        .finale.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .finale button {
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: none;
+            background: #d86015;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .secret {
+            position: absolute;
+            top: 22px;
+            left: 20px;
+            font-size: 12px;
+            color: rgba(132, 93, 79, 0.8);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatAway {
+            0% { opacity: 0; transform: translateY(0) scale(0.9); }
+            30% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.1); }
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-3px, 2px); }
+            40% { transform: translate(3px, -2px); }
+            60% { transform: translate(-2px, -1px); }
+            80% { transform: translate(2px, 3px); }
+        }
+
+        @keyframes tilt {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(1.5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 14px rgba(216, 96, 21, 0.4); }
+            50% { box-shadow: 0 0 24px rgba(216, 96, 21, 0.7); }
+        }
+
+        @keyframes warningPulse {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .cursor-chaos {
+            cursor: crosshair;
+        }
+
+        .mirror {
+            transform: scaleX(-1);
+        }
+
+        @media (max-width: 640px) {
+            .scene {
+                padding: 24px 18px 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene" id="scene">
+        <div class="secret">Press R to reset · Press M for mirror</div>
+        <div class="header">
+            <h1>The Button That Gets Worse</h1>
+            <p>It starts innocent. It will not end innocent.</p>
+        </div>
+        <div class="stats">
+            <div class="stat-pill">Clicks: <span id="clickCount">0</span></div>
+            <div class="stat-pill">Chaos Level: <span id="chaosLevel">0</span></div>
+            <div class="stat-pill">Achievements: <span id="achievementCount">0</span></div>
+        </div>
+        <div class="button-area" id="buttonArea">
+            <button class="doom-button" id="doomButton">Click Me</button>
+            <div class="progress-bar" id="progressBar"><span></span></div>
+            <div class="boss-bar" id="bossBar"><span></span></div>
+            <div class="overlay-warning" id="overlayWarning">Do Not Continue</div>
+            <div class="panel" id="screenPanel"></div>
+        </div>
+        <div class="message-stack" id="messageStack"></div>
+        <div class="finale" id="finale">
+            <h2>Reality Unbuttoned</h2>
+            <p>You clicked 1000 times. The button has achieved sentience.</p>
+            <button id="resetButton">Restart (if you dare)</button>
+        </div>
+    </div>
+
+    <script>
+        const doomButton = document.getElementById('doomButton');
+        const clickCountEl = document.getElementById('clickCount');
+        const chaosLevelEl = document.getElementById('chaosLevel');
+        const messageStack = document.getElementById('messageStack');
+        const scene = document.getElementById('scene');
+        const buttonArea = document.getElementById('buttonArea');
+        const progressBar = document.querySelector('#progressBar span');
+        const screenPanel = document.getElementById('screenPanel');
+        const overlayWarning = document.getElementById('overlayWarning');
+        const bossBar = document.getElementById('bossBar');
+        const bossFill = bossBar.querySelector('span');
+        const finale = document.getElementById('finale');
+        const resetButton = document.getElementById('resetButton');
+        const achievementCount = document.getElementById('achievementCount');
+
+        let clicks = 0;
+        let chaosLevel = 0;
+        let achievements = 0;
+        let dodge = false;
+        let chaosInterval = null;
+        let mirrorMode = false;
+
+        const messages = [
+            "That did something.",
+            "Still good.",
+            "Weird. It moved.",
+            "You felt that, right?",
+            "Button seems nervous.",
+            "Stop poking it.",
+            "Why is it warm?",
+            "This is fine.",
+            "All normal here.",
+            "It clicked back.",
+            "Caution: vibes shifting.",
+            "You have been warned.",
+            "Please hold.",
+            "Button accountability rising.",
+            "Clicking intensifies.",
+            "Glitch in progress.",
+            "Are you happy now?",
+            "It remembers.",
+            "Human detected.",
+            "Back away slowly.",
+            "Button: *sigh*", 
+            "This is your villain origin story.",
+            "The button is drafting a memoir.",
+            "Congratulations, you broke a vibe.",
+            "Your mouse is sweating.",
+            "This is why we can't have nice UI."
+        ];
+
+        const achievementsMap = {
+            25: "Achievement: Curiosity Engine",
+            50: "Achievement: Chaos Intern",
+            75: "Achievement: Button Wrangler",
+            100: "Achievement: Why though?",
+            150: "Achievement: Glitch Gremlin",
+            200: "Achievement: Reality QA",
+            300: "Achievement: Certified Menace",
+            400: "Achievement: Button Whisperer",
+            500: "Achievement: Chaos Architect",
+            666: "Achievement: Spooky Number",
+            777: "Achievement: Slot Machine",
+            900: "Achievement: Endgame",
+            999: "Achievement: The Last Click"
+        };
+
+        const rareEvents = [
+            "A wild toaster appears.",
+            "The button briefly files your taxes.",
+            "A mysterious crow judges you.",
+            "Loading: 404% complete.",
+            "You unlocked a cookie recipe.",
+            "The button rolled its eyes.",
+            "A rubber duck debugs you.",
+            "Achievement unlocked: Overclicking.",
+            "A tiny trombone plays.",
+            "Button status: spicy.",
+            "You have summoned 3 gremlins."
+        ];
+
+        const milestones = {
+            5: "Milestone: Button acknowledges you.",
+            10: "Milestone: You have become click-adjacent.",
+            15: "Milestone: The button purrs.",
+            20: "Milestone: Subtle chaos initiated.",
+            30: "Milestone: Double digits, double trouble.",
+            40: "Milestone: Your finger has a destiny.",
+            50: "Milestone: Halfway to nonsense.",
+            75: "Milestone: Clicks are now a lifestyle.",
+            100: "Milestone: Triple digits unlocked.",
+            150: "Milestone: The button knows your name.",
+            200: "Milestone: Reality audits begin.",
+            250: "Milestone: Chaos now in beta.",
+            300: "Milestone: Button diplomacy failed.",
+            350: "Milestone: The button whispers secrets.",
+            400: "Milestone: Gravity is optional now.",
+            450: "Milestone: You’re basically a legend.",
+            500: "Milestone: Halfway to 1000. Pause?",
+            600: "Milestone: The button files a complaint.",
+            700: "Milestone: Button enters existential phase.",
+            800: "Milestone: The universe sighs.",
+            900: "Milestone: Endgame energy rising.",
+            950: "Milestone: The button is almost omniscient.",
+            999: "Milestone: One click from chaos." 
+        };
+
+        function addMessage(text) {
+            const el = document.createElement('div');
+            el.className = 'message';
+            el.textContent = text;
+            messageStack.prepend(el);
+            if (messageStack.children.length > 6) {
+                messageStack.removeChild(messageStack.lastChild);
+            }
+        }
+
+        function spawnFloatingText(text) {
+            const el = document.createElement('div');
+            el.className = 'floating-text';
+            el.textContent = text;
+            el.style.left = `${Math.random() * 80 + 10}%`;
+            el.style.top = `${Math.random() * 70 + 10}%`;
+            buttonArea.appendChild(el);
+            setTimeout(() => el.remove(), 2400);
+        }
+
+        function spawnPopup(title, body) {
+            const popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.style.left = `${Math.random() * 60 + 10}%`;
+            popup.style.top = `${Math.random() * 50 + 10}%`;
+            popup.innerHTML = `<strong>${title}</strong>${body}`;
+            buttonArea.appendChild(popup);
+            setTimeout(() => popup.remove(), 2500);
+        }
+
+        function triggerNotification(text) {
+            const note = document.createElement('div');
+            note.className = 'notification';
+            note.textContent = text;
+            scene.appendChild(note);
+            setTimeout(() => note.remove(), 2200);
+        }
+
+        function updateChaos() {
+            chaosLevel = Math.min(10, Math.floor(clicks / 100));
+            chaosLevelEl.textContent = chaosLevel;
+            progressBar.style.width = `${(clicks % 100)}%`;
+        }
+
+        function screenShake() {
+            scene.classList.add('shake');
+            setTimeout(() => scene.classList.remove('shake'), 350);
+        }
+
+        function screenTilt() {
+            scene.classList.add('tilt');
+            setTimeout(() => scene.classList.remove('tilt'), 600);
+        }
+
+        function flickerPanel() {
+            screenPanel.classList.add('active');
+            setTimeout(() => screenPanel.classList.remove('active'), 1200);
+        }
+
+        function randomizeCursor() {
+            const cursors = ['crosshair', 'grab', 'zoom-in', 'progress', 'wait'];
+            document.body.style.cursor = cursors[Math.floor(Math.random() * cursors.length)];
+        }
+
+        function toggleDodge() {
+            dodge = true;
+            setTimeout(() => (dodge = false), 1200);
+        }
+
+        function handleButtonMove() {
+            if (!dodge) return;
+            const rect = buttonArea.getBoundingClientRect();
+            const x = Math.random() * (rect.width - 140) + 20;
+            const y = Math.random() * (rect.height - 80) + 20;
+            doomButton.style.position = 'absolute';
+            doomButton.style.left = `${x}px`;
+            doomButton.style.top = `${y}px`;
+        }
+
+        function spawnEmojiRain() {
+            const emoji = document.createElement('div');
+            emoji.textContent = ['💥', '🔥', '🫠', '🌀', '🤯', '😂', '🥳', '😵‍💫', '🦄', '🍕', '👀', '🧃', '💫', '🧠', '🎉', '🤖', '👾'][Math.floor(Math.random() * 17)];
+            emoji.style.position = 'absolute';
+            emoji.style.left = `${Math.random() * 100}%`;
+            emoji.style.top = '-30px';
+            emoji.style.fontSize = '22px';
+            emoji.style.animation = 'floatAway 3s ease forwards';
+            buttonArea.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 2800);
+        }
+
+        function updateStylesByPhase() {
+            if (clicks < 20) {
+                doomButton.style.transform = `scale(${1 + clicks * 0.01})`;
+                doomButton.style.background = `linear-gradient(135deg, rgba(${216}, ${96 + clicks}, ${21 + clicks}, 0.95), rgba(132, 93, 79, 1))`;
+            } else if (clicks < 50) {
+                document.body.classList.add('glitch');
+                if (clicks % 4 === 0) randomizeCursor();
+            } else if (clicks < 100) {
+                if (clicks % 6 === 0) screenTilt();
+                if (clicks % 5 === 0) spawnPopup('Uh oh', 'That felt wrong.');
+            } else if (clicks < 200) {
+                if (clicks % 8 === 0) flickerPanel();
+                if (clicks % 7 === 0) triggerNotification('System scan: 97% nonsense');
+                if (clicks % 9 === 0) toggleDodge();
+            } else if (clicks < 350) {
+                if (clicks % 6 === 0) spawnEmojiRain();
+                if (clicks % 12 === 0) overlayWarning.classList.add('active');
+                setTimeout(() => overlayWarning.classList.remove('active'), 900);
+            } else if (clicks < 500) {
+                doomButton.style.transform = `scale(${0.7 + (Math.sin(clicks / 10) + 1) * 0.4})`;
+                if (clicks % 10 === 0) spawnPopup('Overheating', 'Button temperature critical.');
+            } else if (clicks < 700) {
+                if (clicks % 15 === 0) triggerNotification('Existential alert: You matter.');
+                if (clicks % 20 === 0) screenShake();
+                if (clicks % 14 === 0) bossBar.classList.add('active');
+                bossFill.style.width = `${Math.max(10, 100 - (clicks - 500) / 2)}%`;
+            } else if (clicks < 900) {
+                scene.style.transform = `rotate(${Math.sin(clicks / 15) * 1.8}deg)`;
+                if (clicks % 13 === 0) spawnPopup('Boss Phase', 'The button is evolving.');
+            } else {
+                scene.style.transform = `rotate(${Math.sin(clicks / 6) * 2.8}deg)`;
+                doomButton.style.background = 'linear-gradient(135deg, #2b0b0b, #7a1b0c)';
+                doomButton.textContent = 'DO NOT';
+                document.body.style.background = '#1a0b08';
+                document.body.style.color = '#fff0e6';
+            }
+        }
+
+        function maybeRareEvent() {
+            if (Math.random() < 0.03) {
+                spawnPopup('Rare Event', rareEvents[Math.floor(Math.random() * rareEvents.length)]);
+            }
+        }
+
+        function microChaos() {
+            if (Math.random() < 0.5) spawnFloatingText(['⚡', '✨', '💢', '💫'][Math.floor(Math.random() * 4)]);
+            if (Math.random() < 0.28) screenShake();
+            if (Math.random() < 0.2) screenTilt();
+            if (Math.random() < 0.2) spawnPopup('Notice', 'Something is slightly off.');
+            if (Math.random() < 0.45) {
+                const burst = Math.floor(Math.random() * 4) + 2;
+                for (let i = 0; i < burst; i += 1) spawnEmojiRain();
+            }
+            if (Math.random() < 0.16) triggerNotification('Background process: chaos.exe');
+        }
+
+        function maybeAchievement() {
+            if (achievementsMap[clicks]) {
+                achievements += 1;
+                achievementCount.textContent = achievements;
+                spawnPopup('Achievement!', achievementsMap[clicks]);
+                addMessage(achievementsMap[clicks]);
+            }
+        }
+
+        function celebrateMilestone() {
+            if (milestones[clicks]) {
+                spawnPopup('Milestone', milestones[clicks]);
+                addMessage(milestones[clicks]);
+                for (let i = 0; i < 4; i += 1) {
+                    spawnFloatingText('★');
+                }
+            }
+        }
+
+        function chaosPulse() {
+            chaosInterval = setInterval(() => {
+                if (clicks > 200 && clicks < 900) {
+                    spawnFloatingText('???');
+                }
+            }, 1600);
+        }
+
+        function updateCounter() {
+            clickCountEl.textContent = clicks;
+        }
+
+        function handleClick() {
+            if (clicks >= 1000) return;
+            clicks += 1;
+            updateCounter();
+            updateChaos();
+            maybeAchievement();
+            celebrateMilestone();
+            maybeRareEvent();
+
+            spawnFloatingText(['click', 'tap', 'bonk', 'boop', 'press'][clicks % 5]);
+            microChaos();
+
+            if (clicks < 20) {
+                addMessage(messages[clicks % messages.length]);
+            }
+
+            if (clicks >= 20 && clicks < 50) {
+                spawnFloatingText('loading...');
+                if (clicks % 7 === 0) screenShake();
+            }
+
+            if (clicks >= 50 && clicks < 100) {
+                spawnFloatingText('Achievement unlocked?');
+                if (clicks % 8 === 0) toggleDodge();
+            }
+
+            if (clicks >= 100 && clicks < 200) {
+                spawnPopup('Notice', 'Button has opinions.');
+            }
+
+            if (clicks >= 200 && clicks < 350) {
+                spawnFloatingText('Do not click again');
+                if (clicks % 9 === 0) screenShake();
+            }
+
+            if (clicks >= 350 && clicks < 500) {
+                spawnPopup('Lore', 'The button once ruled a kingdom.');
+            }
+
+            if (clicks >= 500 && clicks < 700) {
+                spawnFloatingText('You have gone too far');
+            }
+
+            if (clicks >= 700 && clicks < 900) {
+                spawnPopup('Final Warning', 'Reality buffer at 4%.');
+            }
+
+            if (clicks >= 900 && clicks < 1000) {
+                overlayWarning.textContent = 'ALMOST THERE';
+                overlayWarning.classList.add('active');
+                setTimeout(() => overlayWarning.classList.remove('active'), 700);
+            }
+
+            if (clicks === 1000) {
+                finale.classList.add('show');
+                spawnPopup('Finale', 'You did it. You monster.');
+                addMessage('Finale unlocked.');
+            }
+
+            updateStylesByPhase();
+        }
+
+        doomButton.addEventListener('click', handleClick);
+        doomButton.addEventListener('mouseenter', handleButtonMove);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key.toLowerCase() === 'r') {
+                resetExperience();
+            }
+            if (event.key.toLowerCase() === 'm') {
+                mirrorMode = !mirrorMode;
+                scene.classList.toggle('mirror', mirrorMode);
+            }
+        });
+
+        resetButton.addEventListener('click', resetExperience);
+
+        function resetExperience() {
+            clicks = 0;
+            achievements = 0;
+            chaosLevel = 0;
+            updateCounter();
+            achievementCount.textContent = achievements;
+            chaosLevelEl.textContent = chaosLevel;
+            messageStack.innerHTML = '';
+            document.body.removeAttribute('style');
+            document.body.style.cursor = '';
+            scene.removeAttribute('style');
+            doomButton.removeAttribute('style');
+            doomButton.textContent = 'Click Me';
+            bossBar.classList.remove('active');
+            overlayWarning.classList.remove('active');
+            finale.classList.remove('show');
+            progressBar.style.width = '0%';
+            addMessage('Reset complete. The button forgives you.');
+        }
+
+        chaosPulse();
+    </script>
+</body>
+</html>
