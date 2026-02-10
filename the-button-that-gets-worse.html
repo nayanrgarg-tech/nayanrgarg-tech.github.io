@@ -637,6 +637,24 @@
             setTimeout(() => win.remove(), 1800);
         }
 
+        function spawnParticleBurst() {
+            const particle = document.createElement('div');
+            particle.textContent = ['•', '✦', '✺', '✹', '✶'][Math.floor(Math.random() * 5)];
+            particle.style.position = 'absolute';
+            particle.style.left = `${Math.random() * 90 + 5}%`;
+            particle.style.top = `${Math.random() * 80 + 10}%`;
+            particle.style.color = ['#ffb37a', '#ffd2b2', '#f6c1a2'][Math.floor(Math.random() * 3)];
+            particle.style.fontSize = `${Math.random() * 12 + 10}px`;
+            particle.style.animation = 'floatAway 2.2s ease forwards';
+            buttonArea.appendChild(particle);
+            setTimeout(() => particle.remove(), 2200);
+        }
+
+        function randomizeButtonLabel() {
+            const labels = ['Click Me', 'Uh oh', 'Again', 'More', 'Chaos', 'Oops', 'Bonk', 'Nope'];
+            doomButton.textContent = labels[Math.floor(Math.random() * labels.length)];
+        }
+
         function toggleDodge() {
             dodge = true;
             setTimeout(() => (dodge = false), 1200);
@@ -733,6 +751,8 @@
             if (Math.random() < 0.2 + chaosBoost * 0.35) playBlip();
             if (Math.random() < 0.12 + chaosBoost * 0.35) flashScreen();
             if (Math.random() < 0.12 + chaosBoost * 0.3) spawnFakeWindow();
+            if (Math.random() < 0.25 + chaosBoost * 0.4) spawnParticleBurst();
+            if (Math.random() < 0.2 + chaosBoost * 0.35) randomizeButtonLabel();
         }
 
         function maybeAchievement() {
@@ -780,6 +800,10 @@
             celebrateMilestone();
             maybeRareEvent();
             playBlip();
+
+            if (clicks % 3 === 0) {
+                scene.style.filter = `hue-rotate(${(clicks * 7) % 360}deg)`;
+            }
 
             spawnFloatingText(['click', 'tap', 'bonk', 'boop', 'press'][clicks % 5]);
             microChaos();
