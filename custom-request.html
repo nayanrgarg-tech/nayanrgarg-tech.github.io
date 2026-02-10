@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Project Request</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="universe">
+        <div class="announcement-stripe">
+            Custom Project Requests
+        </div>
+
+        <section class="request-hero">
+            <h1>Custom Project Request</h1>
+            <p>Share your project goals, timeline, and details. I’ll follow up with scope, pricing, and next steps.</p>
+        </section>
+
+        <main class="request-page">
+            <form class="request-form" action="mailto:nayanrgarg@gmail.com" method="post" enctype="text/plain">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="phone">Phone (optional)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="720-795-2998">
+                    </div>
+                    <div class="form-field">
+                        <label for="budget">Budget Range</label>
+                        <select id="budget" name="budget" required>
+                            <option value="">Select a range</option>
+                            <option value="Under $500">Under $500</option>
+                            <option value="$500-$1,500">$500–$1,500</option>
+                            <option value="$1,500-$3,000">$1,500–$3,000</option>
+                            <option value="$3,000+">$3,000+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="timeline">Timeline</label>
+                    <input type="text" id="timeline" name="timeline" placeholder="Example: 2-4 weeks" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="details">Project Details</label>
+                    <textarea id="details" name="details" placeholder="Describe what you need, goals, features, and any links." required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="request-button">Send Request</button>
+                    <a href="index.html#project-request" class="request-link">Back to Project Request</a>
+                </div>
+                <p class="form-note">Submitting opens your email client with the form details.</p>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
