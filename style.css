@@ -13,7 +13,7 @@ body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     line-height: 1.6;
     color: #333;
-    background: #fafafa;
+    background: #fbf8f6;
 }
 
 .universe {
@@ -22,7 +22,7 @@ body {
 
 /* Announcement Stripe */
 .announcement-stripe {
-    background: linear-gradient(110deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(110deg, #845d4f 0%, #d86015 100%);
     color: white;
     text-align: center;
     padding: 12px 20px;
@@ -32,7 +32,7 @@ body {
 
 /* Hero Zone */
 .hero-zone {
-    background: linear-gradient(140deg, #e0e7ff 0%, #f0f4ff 100%);
+    background: linear-gradient(140deg, #f6eee9 0%, #fbe3d2 100%);
     padding: 80px 20px 60px;
     text-align: center;
     color: #222;
@@ -121,7 +121,7 @@ body {
 }
 
 .navigation-bar a:hover {
-    background: #667eea;
+    background: #845d4f;
     color: white;
 }
 
@@ -160,6 +160,54 @@ body {
     margin-right: auto;
 }
 
+/* Drops Section */
+.drops-panel {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 14px;
+    padding: 28px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(132, 93, 79, 0.18);
+}
+
+.drops-panel h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #222;
+}
+
+.drops-panel p {
+    color: #555;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.drops-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #845d4f;
+    color: white;
+    padding: 12px 26px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.drops-button:hover {
+    background: #d86015;
+    transform: translateY(-2px);
+}
+
 /* Story Grid */
 .story-grid {
     display: grid;
@@ -174,7 +222,7 @@ body {
     border-radius: 12px;
     padding: 28px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border-left: 3px solid #667eea;
+    border-left: 3px solid #845d4f;
     transition: all 0.3s ease;
 }
 
@@ -240,7 +288,7 @@ body {
 }
 
 .tech-tag {
-    background: #667eea;
+    background: #845d4f;
     color: white;
     padding: 4px 12px;
     border-radius: 12px;
@@ -253,7 +301,7 @@ body {
 }
 
 .project-link {
-    color: #667eea;
+    color: #845d4f;
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
@@ -261,7 +309,7 @@ body {
 }
 
 .project-link:hover {
-    color: #764ba2;
+    color: #d86015;
 }
 
 .project-screenshot {
@@ -274,13 +322,13 @@ body {
     object-fit: cover;
     border-radius: 10px;
     border: 1px solid #eef1f7;
-    box-shadow: 0 10px 24px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 10px 24px rgba(132, 93, 79, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .project-tile:hover .project-screenshot img {
     transform: translateY(-4px);
-    box-shadow: 0 16px 30px rgba(102, 126, 234, 0.22);
+    box-shadow: 0 16px 30px rgba(132, 93, 79, 0.28);
 }
 
 .screenshot-placeholder {
@@ -418,7 +466,7 @@ body {
 .rate-number {
     font-size: 52px;
     font-weight: 800;
-    color: #667eea;
+    color: #845d4f;
 }
 
 .rate-period {
@@ -429,7 +477,7 @@ body {
 
 .booking-button {
     display: inline-block;
-    background: #667eea;
+    background: #845d4f;
     color: white;
     padding: 12px 32px;
     border-radius: 24px;
@@ -440,7 +488,7 @@ body {
 }
 
 .booking-button:hover {
-    background: #764ba2;
+    background: #d86015;
     transform: translateY(-2px);
 }
 
@@ -458,7 +506,7 @@ body {
     border-radius: 14px;
     padding: 28px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(102, 126, 234, 0.15);
+    border: 1px solid rgba(132, 93, 79, 0.18);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -492,7 +540,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #667eea;
+    background: #845d4f;
     color: white;
     padding: 10px 20px;
     border-radius: 22px;
@@ -503,19 +551,19 @@ body {
 }
 
 .request-button:hover {
-    background: #764ba2;
+    background: #d86015;
     transform: translateY(-2px);
 }
 
 .request-link {
-    color: #667eea;
+    color: #845d4f;
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
 }
 
 .request-link:hover {
-    color: #764ba2;
+    color: #d86015;
 }
 
 .request-footer {
@@ -530,7 +578,7 @@ body {
 }
 
 .request-external:hover {
-    color: #667eea;
+    color: #845d4f;
 }
 
 /* Custom Request Page */
@@ -564,7 +612,7 @@ body {
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(102, 126, 234, 0.12);
+    border: 1px solid rgba(132, 93, 79, 0.16);
 }
 
 .form-grid {
@@ -664,14 +712,14 @@ body {
 }
 
 .contact-url {
-    color: #667eea;
+    color: #845d4f;
     text-decoration: none;
     font-weight: 600;
     font-size: 15px;
 }
 
 .contact-url:hover {
-    color: #764ba2;
+    color: #d86015;
 }
 
 /* Page Footer */
