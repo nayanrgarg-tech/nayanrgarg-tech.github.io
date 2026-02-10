@@ -25,6 +25,10 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
+                body.chaos-bg {
+                    background: radial-gradient(circle at top, #2b0b0b, #1a0b08, #2b1e1a);
+                    animation: hueSpin 6s linear infinite;
+                }
             justify-content: center;
             overflow: hidden;
             transition: background 0.5s ease, color 0.5s ease;
@@ -43,6 +47,12 @@
             flex-direction: column;
             align-items: center;
             gap: 20px;
+                .wobble {
+                    animation: wobble 0.35s ease;
+                }
+                .spin {
+                    animation: spin 1.8s linear;
+                }
             overflow: hidden;
         }
 
@@ -167,6 +177,18 @@
             inset: 0;
             pointer-events: none;
             opacity: 0;
+        }
+
+        .flash-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.85);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .flash-overlay.active {
+            animation: flash 0.18s ease;
         }
 
         .panel.active {
@@ -341,6 +363,27 @@
             50% { opacity: 1; }
             100% { opacity: 0; }
         }
+            @keyframes wobble {
+                0% { transform: rotate(0deg); }
+                25% { transform: rotate(1deg); }
+                50% { transform: rotate(-1.3deg); }
+                75% { transform: rotate(1.1deg); }
+                100% { transform: rotate(0deg); }
+            }
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            @keyframes hueSpin {
+                from { filter: hue-rotate(0deg); }
+                to { filter: hue-rotate(360deg); }
+            }
+
+        @keyframes flash {
+            0% { opacity: 0; }
+            30% { opacity: 1; }
+            100% { opacity: 0; }
+        }
 
         .cursor-chaos {
             cursor: crosshair;
@@ -375,6 +418,7 @@
             <div class="boss-bar" id="bossBar"><span></span></div>
             <div class="overlay-warning" id="overlayWarning">Do Not Continue</div>
             <div class="panel" id="screenPanel"></div>
+            <div class="flash-overlay" id="flashOverlay"></div>
         </div>
         <div class="message-stack" id="messageStack"></div>
         <div class="finale" id="finale">
@@ -399,6 +443,7 @@
         const finale = document.getElementById('finale');
         const resetButton = document.getElementById('resetButton');
         const achievementCount = document.getElementById('achievementCount');
+        const flashOverlay = document.getElementById('flashOverlay');
 
         let clicks = 0;
         let chaosLevel = 0;
@@ -406,6 +451,9 @@
         let dodge = false;
         let chaosInterval = null;
         let mirrorMode = false;
+        let audioContext = null;
+        let soundOn = true;
+        let chaosDrift = null;
 
         const messages = [
             "That did something.",
@@ -556,6 +604,39 @@
             document.body.style.cursor = cursors[Math.floor(Math.random() * cursors.length)];
         }
 
+        function playBlip() {
+            if (!soundOn) return;
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = ['sine', 'square', 'triangle'][Math.floor(Math.random() * 3)];
+            osc.frequency.value = 120 + Math.random() * 900;
+            gain.gain.value = 0.0001;
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.18);
+            osc.stop(audioContext.currentTime + 0.2);
+        }
+
+        function flashScreen() {
+            flashOverlay.classList.add('active');
+            setTimeout(() => flashOverlay.classList.remove('active'), 200);
+        }
+
+        function spawnFakeWindow() {
+            const win = document.createElement('div');
+            win.className = 'popup';
+            win.style.left = `${Math.random() * 60 + 10}%`;
+            win.style.top = `${Math.random() * 50 + 10}%`;
+            win.innerHTML = `<strong>System Alert</strong>Button integrity at ${Math.floor(Math.random() * 40) + 60}%`;
+            buttonArea.appendChild(win);
+            setTimeout(() => win.remove(), 1800);
+        }
+
         function toggleDodge() {
             dodge = true;
             setTimeout(() => (dodge = false), 1200);
@@ -604,20 +685,31 @@
             } else if (clicks < 500) {
                 doomButton.style.transform = `scale(${0.7 + (Math.sin(clicks / 10) + 1) * 0.4})`;
                 if (clicks % 10 === 0) spawnPopup('Overheating', 'Button temperature critical.');
+                if (clicks % 9 === 0) flashScreen();
             } else if (clicks < 700) {
                 if (clicks % 15 === 0) triggerNotification('Existential alert: You matter.');
                 if (clicks % 20 === 0) screenShake();
                 if (clicks % 14 === 0) bossBar.classList.add('active');
                 bossFill.style.width = `${Math.max(10, 100 - (clicks - 500) / 2)}%`;
+                if (clicks % 7 === 0) flashScreen();
+                document.body.classList.add('chaos-bg');
             } else if (clicks < 900) {
                 scene.style.transform = `rotate(${Math.sin(clicks / 15) * 1.8}deg)`;
                 if (clicks % 13 === 0) spawnPopup('Boss Phase', 'The button is evolving.');
+                if (clicks % 5 === 0) flashScreen();
+                if (clicks % 9 === 0) spawnFakeWindow();
+                if (clicks % 11 === 0) scene.classList.add('wobble');
+                setTimeout(() => scene.classList.remove('wobble'), 400);
             } else {
                 scene.style.transform = `rotate(${Math.sin(clicks / 6) * 2.8}deg)`;
                 doomButton.style.background = 'linear-gradient(135deg, #2b0b0b, #7a1b0c)';
                 doomButton.textContent = 'DO NOT';
                 document.body.style.background = '#1a0b08';
                 document.body.style.color = '#fff0e6';
+                flashScreen();
+                if (clicks % 4 === 0) spawnFakeWindow();
+                if (clicks % 7 === 0) scene.classList.add('spin');
+                setTimeout(() => scene.classList.remove('spin'), 1800);
             }
         }
 
@@ -628,15 +720,19 @@
         }
 
         function microChaos() {
-            if (Math.random() < 0.5) spawnFloatingText(['⚡', '✨', '💢', '💫'][Math.floor(Math.random() * 4)]);
-            if (Math.random() < 0.28) screenShake();
-            if (Math.random() < 0.2) screenTilt();
-            if (Math.random() < 0.2) spawnPopup('Notice', 'Something is slightly off.');
-            if (Math.random() < 0.45) {
-                const burst = Math.floor(Math.random() * 4) + 2;
+            const chaosBoost = Math.min(1, clicks / 700);
+            if (Math.random() < 0.35 + chaosBoost * 0.5) spawnFloatingText(['⚡', '✨', '💢', '💫', '💥'][Math.floor(Math.random() * 5)]);
+            if (Math.random() < 0.2 + chaosBoost * 0.25) screenShake();
+            if (Math.random() < 0.15 + chaosBoost * 0.2) screenTilt();
+            if (Math.random() < 0.12 + chaosBoost * 0.25) spawnPopup('Notice', 'Something is slightly off.');
+            if (Math.random() < 0.3 + chaosBoost * 0.5) {
+                const burst = Math.floor(Math.random() * 6) + 2;
                 for (let i = 0; i < burst; i += 1) spawnEmojiRain();
             }
-            if (Math.random() < 0.16) triggerNotification('Background process: chaos.exe');
+            if (Math.random() < 0.12 + chaosBoost * 0.2) triggerNotification('Background process: chaos.exe');
+            if (Math.random() < 0.2 + chaosBoost * 0.35) playBlip();
+            if (Math.random() < 0.12 + chaosBoost * 0.35) flashScreen();
+            if (Math.random() < 0.12 + chaosBoost * 0.3) spawnFakeWindow();
         }
 
         function maybeAchievement() {
@@ -664,6 +760,11 @@
                     spawnFloatingText('???');
                 }
             }, 1600);
+            chaosDrift = setInterval(() => {
+                if (clicks > 300) {
+                    scene.style.transform = `translate(${Math.sin(Date.now() / 200) * 6}px, ${Math.cos(Date.now() / 210) * 6}px)`;
+                }
+            }, 120);
         }
 
         function updateCounter() {
@@ -678,6 +779,7 @@
             maybeAchievement();
             celebrateMilestone();
             maybeRareEvent();
+            playBlip();
 
             spawnFloatingText(['click', 'tap', 'bonk', 'boop', 'press'][clicks % 5]);
             microChaos();
@@ -743,6 +845,10 @@
                 mirrorMode = !mirrorMode;
                 scene.classList.toggle('mirror', mirrorMode);
             }
+            if (event.key.toLowerCase() === 's') {
+                soundOn = !soundOn;
+                addMessage(soundOn ? 'Sound on.' : 'Sound muted.');
+            }
         });
 
         resetButton.addEventListener('click', resetExperience);
@@ -757,6 +863,7 @@
             messageStack.innerHTML = '';
             document.body.removeAttribute('style');
             document.body.style.cursor = '';
+            document.body.classList.remove('chaos-bg');
             scene.removeAttribute('style');
             doomButton.removeAttribute('style');
             doomButton.textContent = 'Click Me';
