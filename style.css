@@ -253,7 +253,7 @@ body {
     position: absolute;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
+    background: radial-gradient(circle, rgba("255, 255, 255, 0.35"), transparent 70%); 
     animation: glowPulse 3s ease-in-out infinite;
 }
 
@@ -313,7 +313,7 @@ body {
 .story-block {
     background: white;
     border-radius: 12px;
-    padding: 28px;
+     background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     border-left: 3px solid #845d4f;
     transition: all 0.3s ease;
