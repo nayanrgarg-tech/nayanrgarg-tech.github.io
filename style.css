@@ -685,30 +685,6 @@ body {
 }
 
 /* Arduino Kit Section */
-.kit-anchor-links {
-    max-width: 980px;
-    margin: 0 auto 28px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.kit-anchor-links a {
-    text-decoration: none;
-    color: #845d4f;
-    border: 1px solid rgba(132, 93, 79, 0.28);
-    border-radius: 999px;
-    padding: 8px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    background: #fff;
-}
-
-.kit-anchor-links a:hover {
-    background: #845d4f;
-    color: #fff;
-}
-
 .kit-panel {
     max-width: 980px;
     margin: 0 auto 24px;
