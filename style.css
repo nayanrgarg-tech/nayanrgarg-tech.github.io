@@ -804,6 +804,23 @@ body {
     background: #d86015;
 }
 
+.signup-button {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background: #845d4f;
+    border-radius: 999px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.signup-button:hover {
+    background: #d86015;
+    transform: translateY(-2px);
+}
+
 /* Custom Request Page */
 .request-page {
     max-width: 900px;
