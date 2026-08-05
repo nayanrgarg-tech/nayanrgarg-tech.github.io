@@ -987,37 +987,29 @@ a {
     color: var(--text);
 }
 
-/* ---- Whimsical scrapbook gallery: sticky intro + gently floating photo sidebar ---- */
+/* ---- Kit gallery: intro card + photos floating in the page's side margins ---- */
 @keyframes floaty {
     0%, 100% { translate: 0 0; }
-    50% { translate: 0 -11px; }
-}
-
-.kit-gallery-layout {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 38px;
-    align-items: start;
-}
-
-.kit-gallery-intro {
-    position: sticky;
-    top: 24px;
+    50% { translate: 0 -12px; }
 }
 
 .kit-gallery-intro p {
     color: var(--text-soft);
     line-height: 1.75;
     font-size: 15px;
-    margin-bottom: 20px;
+    max-width: 640px;
+    margin: 0 auto 22px;
+    text-align: center;
 }
 
 .kit-find-list {
     list-style: none;
     display: flex;
-    flex-direction: column;
+    flex-flow: row wrap;
+    justify-content: center;
     gap: 12px;
-    align-items: flex-start;
+    max-width: 720px;
+    margin: 0 auto;
 }
 
 .kit-find-list li {
@@ -1037,14 +1029,9 @@ a {
 .kit-find-list li:nth-child(5n+3) { background: #dcf6e5; transform: rotate(-1.5deg); }
 .kit-find-list li:nth-child(5n+4) { background: #fff0d1; transform: rotate(2deg); }
 .kit-find-list li:nth-child(5n+5) { background: #ecdcff; transform: rotate(-1deg); }
-.kit-find-list li:hover { transform: rotate(0deg) translateX(5px) scale(1.05); }
+.kit-find-list li:hover { transform: rotate(0deg) translateY(-3px) scale(1.05); }
 
-.kit-photo-strip {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
+/* shared polaroid look */
 .polaroid {
     background: #fff;
     border: 3px solid var(--ink);
@@ -1053,12 +1040,9 @@ a {
     padding: 12px 12px 0;
     margin: 0;
     position: relative;
-    /* gentle bob so the photos feel like they're floating as you scroll */
-    animation: floaty 6s ease-in-out infinite;
     transition: transform 0.35s var(--bounce), box-shadow 0.35s var(--ease);
 }
 
-/* washi-tape strip on top of each photo */
 .polaroid::before {
     content: "";
     position: absolute;
@@ -1074,7 +1058,7 @@ a {
 
 .polaroid img {
     width: 100%;
-    height: 200px;
+    height: 180px;
     object-fit: cover;
     display: block;
     border-radius: 3px;
@@ -1089,28 +1073,74 @@ a {
     font-size: 15px;
 }
 
-.polaroid:nth-child(3n+1) { transform: rotate(-3deg); animation-duration: 6.5s; animation-delay: -0.4s; }
-.polaroid:nth-child(3n+2) { transform: rotate(2deg);  animation-duration: 7.4s; animation-delay: -2.1s; }
-.polaroid:nth-child(3n+3) { transform: rotate(-1.5deg); animation-duration: 6.9s; animation-delay: -3.4s; }
-.polaroid:nth-child(3n+1)::before { background: rgba(61, 110, 240, 0.5); }
-.polaroid:nth-child(3n+2)::before { background: rgba(245, 83, 155, 0.5); }
-.polaroid:nth-child(3n+3)::before { background: rgba(35, 171, 90, 0.48); }
+/* fallback grid inside the panel — shown when the margin floaters can't fit */
+.kit-fallback-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px;
+    margin-top: 34px;
+}
 
-.polaroid:hover {
-    transform: rotate(0deg) scale(1.03);
+.kit-fallback-photos .polaroid:nth-child(3n+1) { transform: rotate(-2.5deg); }
+.kit-fallback-photos .polaroid:nth-child(3n+2) { transform: rotate(2deg); }
+.kit-fallback-photos .polaroid:nth-child(3n+3) { transform: rotate(-1.5deg); }
+.kit-fallback-photos .polaroid:nth-child(3n+1)::before { background: rgba(61, 110, 240, 0.5); }
+.kit-fallback-photos .polaroid:nth-child(3n+2)::before { background: rgba(245, 83, 155, 0.5); }
+.kit-fallback-photos .polaroid:nth-child(3n+3)::before { background: rgba(35, 171, 90, 0.48); }
+.kit-fallback-photos .polaroid:hover {
+    transform: rotate(0deg) translateY(-5px) scale(1.02);
     box-shadow: 9px 13px 0 var(--ink);
     z-index: 2;
 }
 
-@media (max-width: 760px) {
-    .kit-gallery-layout { grid-template-columns: 1fr; gap: 28px; }
-    .kit-gallery-intro { position: static; }
-    .kit-photo-strip { flex-flow: row wrap; justify-content: center; }
-    .polaroid { width: calc(50% - 20px); }
+/* the photos drifting in the left & right page margins, fixed so they
+   stay floating the whole way down the page */
+.page-floaties { display: none; }
+
+.floatie {
+    position: fixed;
+    z-index: -1;
+    width: 152px;
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 5px 5px 0 rgba(42, 32, 26, 0.5);
+    padding: 11px;
+    margin: 0;
+    pointer-events: none;
+    animation: floaty 6.5s ease-in-out infinite;
+}
+
+.floatie img {
+    width: 100%;
+    height: 108px;
+    object-fit: cover;
+    display: block;
+    border-radius: 3px;
+}
+
+/* four down the left edge, three down the right, each tilted + bobbing */
+.floatie:nth-of-type(1) { left: 24px;  top: 10vh; transform: rotate(-6deg); animation-duration: 6.5s; animation-delay: -0.3s; }
+.floatie:nth-of-type(2) { left: 32px;  top: 35vh; transform: rotate(4deg);  animation-duration: 7.6s; animation-delay: -2.2s; }
+.floatie:nth-of-type(3) { left: 20px;  top: 60vh; transform: rotate(-3deg); animation-duration: 6.9s; animation-delay: -3.6s; }
+.floatie:nth-of-type(4) { left: 34px;  top: 83vh; transform: rotate(5deg);  animation-duration: 7.2s; animation-delay: -1.1s; }
+.floatie:nth-of-type(5) { right: 26px; top: 15vh; transform: rotate(5deg);  animation-duration: 7.0s; animation-delay: -1.7s; }
+.floatie:nth-of-type(6) { right: 20px; top: 45vh; transform: rotate(-5deg); animation-duration: 6.6s; animation-delay: -2.9s; }
+.floatie:nth-of-type(7) { right: 32px; top: 72vh; transform: rotate(3deg);  animation-duration: 7.8s; animation-delay: -0.6s; }
+
+/* only float in the margins when there's real gutter room; otherwise
+   show the photos as a grid inside the panel */
+@media (min-width: 1500px) {
+    .page-floaties { display: block; }
+    .kit-fallback-photos { display: none; }
+}
+
+@media (max-width: 480px) {
+    .kit-fallback-photos { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .polaroid { animation: none; }
+    .floatie { animation: none; }
 }
 
 .kit-inquire p {
