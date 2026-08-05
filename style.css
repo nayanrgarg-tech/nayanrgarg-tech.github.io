@@ -987,6 +987,122 @@ a {
     color: var(--text);
 }
 
+/* ---- Whimsical scrapbook gallery: sticky intro + polaroid photo sidebar ---- */
+.kit-gallery-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 38px;
+    align-items: start;
+}
+
+.kit-gallery-intro {
+    position: sticky;
+    top: 24px;
+}
+
+.kit-gallery-intro p {
+    color: var(--text-soft);
+    line-height: 1.75;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.kit-find-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.kit-find-list li {
+    font-family: 'Fredoka', 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--surface-2);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-pill);
+    padding: 9px 18px;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: transform 0.3s var(--bounce);
+}
+
+.kit-find-list li:nth-child(5n+1) { background: #dcecff; transform: rotate(-2deg); }
+.kit-find-list li:nth-child(5n+2) { background: #ffe0ec; transform: rotate(1.5deg); }
+.kit-find-list li:nth-child(5n+3) { background: #dcf6e5; transform: rotate(-1.5deg); }
+.kit-find-list li:nth-child(5n+4) { background: #fff0d1; transform: rotate(2deg); }
+.kit-find-list li:nth-child(5n+5) { background: #ecdcff; transform: rotate(-1deg); }
+.kit-find-list li:hover { transform: rotate(0deg) translateX(5px) scale(1.05); }
+
+.kit-photo-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.polaroid {
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 6px 6px 0 var(--ink);
+    padding: 12px 12px 0;
+    margin: 0;
+    position: relative;
+    transition: transform 0.35s var(--bounce), box-shadow 0.35s var(--ease);
+}
+
+/* washi-tape strip on top of each photo */
+.polaroid::before {
+    content: "";
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    width: 92px;
+    height: 26px;
+    transform: translateX(-50%) rotate(-4deg);
+    background: rgba(247, 181, 44, 0.6);
+    border-left: 1px dashed rgba(42, 32, 26, 0.2);
+    border-right: 1px dashed rgba(42, 32, 26, 0.2);
+}
+
+.polaroid img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+    border-radius: 3px;
+}
+
+.polaroid figcaption {
+    font-family: 'Fredoka', 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px 6px 15px;
+    color: var(--ink);
+    font-size: 15px;
+}
+
+.polaroid:nth-child(3n+1) { transform: rotate(-3deg); }
+.polaroid:nth-child(3n+2) { transform: rotate(2deg); }
+.polaroid:nth-child(3n+3) { transform: rotate(-1.5deg); }
+.polaroid:nth-child(3n+1)::before { background: rgba(61, 110, 240, 0.5); }
+.polaroid:nth-child(3n+2)::before { background: rgba(245, 83, 155, 0.5); }
+.polaroid:nth-child(3n+3)::before { background: rgba(35, 171, 90, 0.48); }
+
+.polaroid:hover {
+    transform: rotate(0deg) translateY(-6px) scale(1.03);
+    box-shadow: 9px 13px 0 var(--ink);
+    z-index: 2;
+}
+
+@media (max-width: 760px) {
+    .kit-gallery-layout { grid-template-columns: 1fr; gap: 28px; }
+    .kit-gallery-intro { position: static; }
+    .kit-photo-strip { flex-flow: row wrap; justify-content: center; }
+    .polaroid { width: calc(50% - 20px); }
+}
+
 .kit-inquire p {
     color: var(--text-soft);
     margin-bottom: 12px;
